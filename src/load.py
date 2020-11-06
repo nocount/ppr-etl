@@ -1,0 +1,1 @@
+# Taking transformed snapshot and merging it with the current data snapshot
