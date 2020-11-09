@@ -79,12 +79,13 @@ def transform_data(df):
     # Renaming sales_date column
     df.rename(columns={'Date of Sale (dd/mm/yyyy)': 'sales_date'}, inplace=True)
 
+    # Generating month start from sales date
     df['month_start'] = df.sales_date.apply(lambda x: parse_month_start(date=x))
 
     df['address'] = df.Address.apply(lambda s: s.lower())
     df['county'] = df.County.apply(lambda s: s.lower())
 
-    # TODO: fix this on mac so we dont reference by index
+    # Cleaning the price to an integer field
     df['sales_value'] = df.iloc[:, 3].apply(lambda x: clean_price(price=x)).astype('int64')
     df.drop(df.columns[3], axis=1, inplace=True)
 

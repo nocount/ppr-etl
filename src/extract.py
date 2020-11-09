@@ -1,7 +1,9 @@
 from urllib.request import Request, urlopen
-from urllib.error import URLError
+from urllib.error import URLError, HTTPError
 from utils import PPR_LINK, upload_fileobj_to_s3
 
+import ssl
+ssl._create_default_https_context = ssl._create_stdlib_context
 
 def pull_latest_ppr():
     """
@@ -23,8 +25,8 @@ def main():
     try:
         response = pull_latest_ppr()
         upload_fileobj_to_s3(key='extract/ppr.zip', obj=response)
-    except URLError:
-        print('Log - Errror in pulling  and uploading ppr data')
+    except (URLError, HTTPError) as err:
+        print('Log - Errror in pulling  and uploading ppr data: ' + str(err.reason))
 
 
 if __name__ == '__main__':
