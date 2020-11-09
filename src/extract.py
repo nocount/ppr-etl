@@ -1,35 +1,31 @@
-# Loading data from Residential Property Price registry into S3
-""" Todo: 
-- separate file download and upload into separate functions
-- add try catches so failure wouldn't break the flow
-- scrape for link instead of hardcoding?
-"""
-
-import boto3
-
 from urllib.request import Request, urlopen
+from urllib.error import URLError
+from utils import PPR_LINK, upload_fileobj_to_s3
 
 
-ppr_link = (
-	'https://www.propertypriceregister.ie/website/npsra/ppr/npsra-ppr.nsf/Downloads/PPR-ALL.zip/$FILE/PPR-ALL.zip'
-)
+def pull_latest_ppr():
+    """
+    Pulls the latest data from the Property Price Register website.
+    Currently pulls a full load of all past data.
+
+    :returns: response containing data from PPR
+    """
+    request = Request(url=PPR_LINK, headers={'User-Agent': 'Mozilla/5.0'})
+    response = urlopen(request)
+
+    return response
 
 
-def scrape_dl_link():
-	pass
-
-
-def upload_to_s3():
-	pass
+def main():
+    """
+    Pulls data from the PPR website and then sends it to s3 as a zip.
+    """
+    try:
+        response = pull_latest_ppr()
+        upload_fileobj_to_s3(key='extract/ppr.zip', obj=response)
+    except URLError:
+        print('Log - Errror in pulling  and uploading ppr data')
 
 
 if __name__ == '__main__':
-
-	request = Request(ppr_link, headers={'User-Agent': 'Mozilla/5.0'})
-	response = urlopen(request)
-
-	s3 = boto3.resource('s3')
-	s3.Object('ppr-etl', 'extract/ppr.zip').upload_fileobj(response)
-
-	print('Praise the Sun')
-
+    main()
