@@ -2,8 +2,6 @@ from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 from utils import PPR_LINK, upload_fileobj_to_s3
 
-import ssl
-ssl._create_default_https_context = ssl._create_stdlib_context
 
 def pull_latest_ppr():
     """
