@@ -6,5 +6,5 @@ This project is used to demonstrate a basic etl process using data from the Resi
 Further Work:  
 Scrape for ppr link instead of hardcoding it.  
 Only fetch and process new data by scraping the other download page
-Set up scripts to be run automatically periodically (Lambda, Kafka)
+Set up scripts to be run automatically periodically (Lambda, Kafka)  
 Investigate further quarantining of data
